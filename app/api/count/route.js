@@ -22,9 +22,17 @@ export async function GET() {
     });
 
     const count = sessions.data?.length ?? 0;
-    return NextResponse.json({ count });
+    return NextResponse.json({ count }, {
+      headers: {
+        "Cache-Control": "no-store, max-age=0",
+      },
+    });
   } catch (err) {
     console.error("Count error:", err);
-    return NextResponse.json({ count: 0 });
+    return NextResponse.json({ count: 0 }, {
+      headers: {
+        "Cache-Control": "no-store, max-age=0",
+      },
+    });
   }
 }
