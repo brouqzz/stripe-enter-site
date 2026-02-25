@@ -63,21 +63,34 @@ export default function HomePage() {
         backgroundColor: "#fafafa",
       }}
     >
+      <p
+        style={{
+          fontSize: "1rem",
+          fontWeight: 400,
+          color: "#333",
+          marginBottom: "2rem",
+          textAlign: "center",
+          maxWidth: "320px",
+        }}
+      >
+        click to see what everyone else is paying for
+      </p>
       <button
         onClick={handleEnterClick}
         disabled={loading}
         style={{
-          padding: "0.75rem 2rem",
-          fontSize: "1rem",
-          fontWeight: 500,
-          color: "#fff",
+          width: "48px",
+          height: "48px",
+          padding: 0,
           backgroundColor: loading ? "#999" : "#000",
           border: "none",
           borderRadius: "6px",
           cursor: loading ? "not-allowed" : "pointer",
         }}
+        title={loading ? "Please wait..." : "Pay to enter"}
+        aria-label={loading ? "Please wait..." : "Pay to enter"}
       >
-        {loading ? "Please wait..." : "Enter"}
+        {loading ? "..." : ""}
       </button>
     </main>
   );
