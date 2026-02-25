@@ -65,12 +65,12 @@ export default function HomePage() {
     >
       <p
         style={{
-          fontSize: "1rem",
-          fontWeight: 400,
-          color: "#333",
-          marginBottom: "2rem",
+          fontSize: "1.5rem",
+          fontWeight: 500,
+          color: "#111",
+          marginBottom: "2.5rem",
           textAlign: "center",
-          maxWidth: "320px",
+          whiteSpace: "nowrap",
         }}
       >
         click to see what everyone else is paying for
@@ -79,13 +79,14 @@ export default function HomePage() {
         onClick={handleEnterClick}
         disabled={loading}
         style={{
-          width: "48px",
-          height: "48px",
+          width: "56px",
+          height: "56px",
           padding: 0,
           backgroundColor: loading ? "#999" : "#000",
           border: "none",
-          borderRadius: "6px",
+          borderRadius: "50%",
           cursor: loading ? "not-allowed" : "pointer",
+          boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
         }}
         title={loading ? "Please wait..." : "Pay to enter"}
         aria-label={loading ? "Please wait..." : "Pay to enter"}
