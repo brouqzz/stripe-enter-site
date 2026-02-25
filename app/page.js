@@ -53,6 +53,16 @@ export default function HomePage() {
 
   return (
     <main
+      onClick={loading ? undefined : handleEnterClick}
+      onKeyDown={(e) => {
+        if (!loading && (e.key === "Enter" || e.key === " ")) {
+          e.preventDefault();
+          handleEnterClick();
+        }
+      }}
+      role="button"
+      tabIndex={0}
+      aria-label="Pay to see what everyone else is paying for"
       style={{
         minHeight: "100vh",
         display: "flex",
@@ -61,6 +71,7 @@ export default function HomePage() {
         justifyContent: "center",
         padding: "1rem",
         backgroundColor: "#fafafa",
+        cursor: loading ? "wait" : "pointer",
       }}
     >
       <p
@@ -68,31 +79,12 @@ export default function HomePage() {
           fontSize: "1.5rem",
           fontWeight: 500,
           color: "#111",
-          marginBottom: "2.5rem",
           textAlign: "center",
           whiteSpace: "nowrap",
         }}
       >
-        click to see what everyone else is paying for
+        {loading ? "..." : "click to see what everyone else is paying for"}
       </p>
-      <button
-        onClick={handleEnterClick}
-        disabled={loading}
-        style={{
-          width: "56px",
-          height: "56px",
-          padding: 0,
-          backgroundColor: loading ? "#999" : "#000",
-          border: "none",
-          borderRadius: "50%",
-          cursor: loading ? "not-allowed" : "pointer",
-          boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
-        }}
-        title={loading ? "Please wait..." : "Pay to enter"}
-        aria-label={loading ? "Please wait..." : "Pay to enter"}
-      >
-        {loading ? "..." : ""}
-      </button>
     </main>
   );
 }
