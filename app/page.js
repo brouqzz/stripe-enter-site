@@ -4,15 +4,23 @@
  * Homepage – the first page users see.
  * "use client" means this runs in the browser so we can use onClick and fetch.
  *
- * When the user clicks "Enter", we call our API route to create a Stripe Checkout session,
- * then redirect the user to Stripe's payment page.
+ * When the user clicks, we call our API route to create a Stripe Checkout session,
+ * then redirect to Stripe's payment page.
+ * We also show a counter of how many people have entered (from /api/count).
  */
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function HomePage() {
-  // "loading" state: true while we're creating the checkout session (button shows "Please wait...")
   const [loading, setLoading] = useState(false);
+  const [count, setCount] = useState(null);
+
+  useEffect(() => {
+    fetch("/api/count")
+      .then((res) => res.json())
+      .then((data) => setCount(data.count))
+      .catch(() => setCount(0));
+  }, []);
 
   async function handleEnterClick() {
     setLoading(true);
@@ -53,16 +61,6 @@ export default function HomePage() {
 
   return (
     <main
-      onClick={loading ? undefined : handleEnterClick}
-      onKeyDown={(e) => {
-        if (!loading && (e.key === "Enter" || e.key === " ")) {
-          e.preventDefault();
-          handleEnterClick();
-        }
-      }}
-      role="button"
-      tabIndex={0}
-      aria-label="Pay to see what everyone else is paying for"
       style={{
         minHeight: "100vh",
         display: "flex",
@@ -71,19 +69,58 @@ export default function HomePage() {
         justifyContent: "center",
         padding: "1rem",
         backgroundColor: "#fafafa",
-        cursor: loading ? "wait" : "pointer",
       }}
     >
+      <h1
+        style={{
+          fontSize: "1.5rem",
+          fontWeight: 600,
+          marginBottom: "2rem",
+          color: "#111",
+        }}
+      >
+        Welcome
+      </h1>
       <p
         style={{
           fontSize: "1.5rem",
           fontWeight: 500,
           color: "#111",
+          marginBottom: "2.5rem",
           textAlign: "center",
           whiteSpace: "nowrap",
         }}
       >
-        {loading ? "..." : "click to see what everyone else is paying for"}
+        click to see what everyone else is paying for
+      </p>
+      <button
+        onClick={handleEnterClick}
+        disabled={loading}
+        style={{
+          width: "56px",
+          height: "56px",
+          padding: 0,
+          backgroundColor: loading ? "#999" : "#000",
+          border: "none",
+          borderRadius: "50%",
+          cursor: loading ? "not-allowed" : "pointer",
+          boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
+        }}
+        title={loading ? "Please wait..." : "Pay to enter"}
+        aria-label={loading ? "Please wait..." : "Pay to enter"}
+      >
+        {loading ? "..." : ""}
+      </button>
+      <p
+        style={{
+          fontSize: "1rem",
+          fontWeight: 500,
+          color: "#333",
+          marginTop: "2.5rem",
+          textAlign: "center",
+        }}
+      >
+        Number of people who entered: {count === null ? "…" : count}
       </p>
     </main>
   );
