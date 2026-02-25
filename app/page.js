@@ -63,16 +63,6 @@ export default function HomePage() {
         backgroundColor: "#fafafa",
       }}
     >
-      <h1
-        style={{
-          fontSize: "1.5rem",
-          fontWeight: 600,
-          marginBottom: "2rem",
-          color: "#111",
-        }}
-      >
-        Welcome
-      </h1>
       <button
         onClick={handleEnterClick}
         disabled={loading}
