@@ -15,11 +15,19 @@ export default function HomePage() {
   const [loading, setLoading] = useState(false);
   const [count, setCount] = useState(null);
 
-  useEffect(() => {
-    fetch("/api/count")
+  function fetchCount() {
+    fetch(`/api/count?t=${Date.now()}`)
       .then((res) => res.json())
       .then((data) => setCount(data.count))
       .catch(() => setCount(0));
+  }
+
+  useEffect(() => {
+    fetchCount();
+    // Refetch when user comes back to the tab (e.g. after paying and returning)
+    const onFocus = () => fetchCount();
+    window.addEventListener("focus", onFocus);
+    return () => window.removeEventListener("focus", onFocus);
   }, []);
 
   async function handleEnterClick() {
@@ -95,10 +103,10 @@ export default function HomePage() {
       </p>
       <p
         style={{
-          fontSize: "1rem",
-          fontWeight: 500,
-          color: "#333",
-          marginTop: "2.5rem",
+          fontSize: "1.25rem",
+          fontWeight: 600,
+          color: "#111",
+          marginTop: "3rem",
           textAlign: "center",
         }}
       >
