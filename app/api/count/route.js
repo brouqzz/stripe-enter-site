@@ -1,29 +1,27 @@
 /**
  * API Route: GET /api/count
  * Returns the number of people who have completed payment (entered).
- * The count is stored in Upstash Redis. If Redis is not configured, returns 0.
+ * Uses Stripe as the source of truth: we count completed checkout sessions.
+ * No Redis needed – the count updates as soon as someone pays.
  */
 
 import { NextResponse } from "next/server";
-
-const COUNT_KEY = "entered_count";
-
-async function getCount() {
-  const url = process.env.UPSTASH_REDIS_REST_URL;
-  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
-  if (!url || !token) return 0;
-
-  const res = await fetch(`${url}/get/${COUNT_KEY}`, {
-    headers: { Authorization: `Bearer ${token}` },
-  });
-  const data = await res.json();
-  if (data.result === null) return 0;
-  return parseInt(data.result, 10) || 0;
-}
+import Stripe from "stripe";
 
 export async function GET() {
   try {
-    const count = await getCount();
+    const secretKey = process.env.STRIPE_SECRET_KEY;
+    if (!secretKey) {
+      return NextResponse.json({ count: 0 });
+    }
+
+    const stripe = new Stripe(secretKey);
+    const sessions = await stripe.checkout.sessions.list({
+      status: "complete",
+      limit: 100,
+    });
+
+    const count = sessions.data?.length ?? 0;
     return NextResponse.json({ count });
   } catch (err) {
     console.error("Count error:", err);
