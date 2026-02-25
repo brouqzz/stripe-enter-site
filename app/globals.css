@@ -1,0 +1,21 @@
+/* Global styles for the whole site. */
+/* We keep it minimal: just a reset and basic defaults. */
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html,
+body {
+  max-width: 100vw;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+body {
+  background-color: #fff;
+  color: #111;
+  font-family: system-ui, -apple-system, sans-serif;
+}
