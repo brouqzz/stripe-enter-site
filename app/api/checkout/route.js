@@ -46,7 +46,7 @@ export async function POST(request) {
               name: "Enter",
               description: "One-time payment to enter",
             },
-            unit_amount: 100, // 100 cents = 1€ (Stripe uses the smallest currency unit).
+            unit_amount: 141, // 141 cents = 1.41€ (Stripe uses the smallest currency unit).
           },
           quantity: 1,
         },
