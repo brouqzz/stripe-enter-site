@@ -1,13 +1,25 @@
+"use client";
+
 /**
  * Success page – shown AFTER the user completes payment on Stripe.
- * Stripe redirects the user here using the success_url we set in the checkout session.
- *
- * You asked for a completely blank page: just an empty white screen.
- * So this component returns nothing visible – only a minimal wrapper so Next.js is happy.
+ * Stripe redirects here with ?session_id=... so we can count this entry once (no double count on refresh).
+ * We call /api/register-entry with the session_id, then show a blank page.
  */
 
+import { useEffect } from "react";
+
 export default function SuccessPage() {
-  // Return a minimal fragment. The layout still gives us <html> and <body>.
-  // We don't render any text, images, or buttons – just a blank white screen.
+  useEffect(() => {
+    const params = new URLSearchParams(typeof window !== "undefined" ? window.location.search : "");
+    const sessionId = params.get("session_id");
+    if (sessionId) {
+      fetch("/api/register-entry", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ session_id: sessionId }),
+      }).catch(() => {});
+    }
+  }, []);
+
   return null;
 }
